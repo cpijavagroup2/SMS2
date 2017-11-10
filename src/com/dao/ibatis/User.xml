@@ -2,5 +2,19 @@
 <!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sqlmap-2.dtd">
 <sqlMap namespace="User">
 	
+	<select id="validateLogin" resultClass="java.lang.String">
+		SELECT first_name
+		FROM sms_users2
+		WHERE user_id = #userName#
+		  AND password= #password#	
+	</select>
+	
+	<procedure id="updateLogin" parameterClass="java.util.Map">
+		BEGIN
+			UPDATE sms_users2
+			SET last_login = #currentDate#
+			WHERE user_id = #userName#;
+		END;
+	</procedure>
 	
 </sqlMap>

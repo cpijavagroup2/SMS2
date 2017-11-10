@@ -1,0 +1,26 @@
+div#mainDiv{
+	font-family: sans-serif;
+}
+
+#lblMessage{
+	font-size: 8px;
+	color: red;
+	text-align: center;
+}
+input[type="text"], input[type="password"]{
+	width: 150px;
+}
+#fsLogin{
+ 	border-radius: 25px;
+    border: 2px solid #b0b0b0;
+    padding: 20px;
+    width: 200px;
+    height: 150px; 
+}
+
+input[type="button"]{	
+	border-radius: 25px;
+    border: 1px solid #658efc;   
+	width: 100px;
+	background-color: #3e56ff;
+}

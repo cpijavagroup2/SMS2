@@ -21,6 +21,12 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
 		<property name="password" value="HR"></property>
 	</bean>
 	
+	<bean id="userDao" class="com.dao.impl.UserDaoImpl" depends-on="sqlMapClient">
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+	</bean>
 	
+	<bean id="loginService" class="com.service.impl.LoginServiceImpl" depends-on="userDao">
+		<property name="userDao" ref="userDao"></property>
+	</bean>
 	
 </beans>
