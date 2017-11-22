@@ -21,12 +21,43 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
 		<property name="password" value="HR"></property>
 	</bean>
 	
-	<bean id="userDao" class="com.dao.impl.UserDaoImpl" depends-on="sqlMapClient">
+	<bean id="loginUserDao" class="com.dao.impl.LoginUserDaoImpl" depends-on="sqlMapClient">
 		<property name="sqlMapClient" ref="sqlMapClient"></property>
 	</bean>
 	
-	<bean id="loginService" class="com.service.impl.LoginServiceImpl" depends-on="userDao">
-		<property name="userDao" ref="userDao"></property>
+	<bean id="loginService" class="com.service.impl.LoginServiceImpl" depends-on="loginUserDao">
+		<property name="loginUserDao" ref="loginUserDao">	</property>
 	</bean>
 	
+	<bean id="userDao" class="com.dao.impl.UserDaoImpl" depends-on="sqlMapClient">
+		<property name="sqlMapClient" ref="sqlMapClient"/>
+	</bean>
+	
+	<bean id="userService" class="com.service.impl.UserServiceImpl" depends-on="userDao">
+		<property name="userDao" ref="userDao"/>
+	</bean>
+	
+	<bean id ="issuanceDao" class="com.dao.impl.IssuanceDaoImpl" depends-on ="sqlMapClient" >
+	<property name = "sqlMapClient" ref="sqlMapClient"/>
+	</bean>
+	
+	<bean id ="issuanceService" class="com.service.impl.IssuanceServiceImpl" depends-on ="issuanceDao" >
+	<property name = "issuanceDao" ref="issuanceDao"/>
+	</bean>
+		
+	<bean id="supplyDao" class="com.dao.impl.SupplyDaoImpl" depends-on="sqlMapClient" >
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+	</bean>
+	
+	<bean id="supplyService" class="com.service.impl.SupplyServiceImpl" depends-on="supplyDao">
+		<property name="supplyDao" ref="supplyDao"></property>
+	</bean>
+	
+	<bean id="stockDao" class="com.dao.impl.StockDaoImpl" depends-on="sqlMapClient">
+		<property name="sqlMapClient" ref="sqlMapClient"></property>
+	</bean>
+	
+	<bean id="stockService" class="com.service.impl.StockServiceImpl" depends-on="stockDao">
+		<property name="stockDao" ref="stockDao"/>
+	</bean>
 </beans>

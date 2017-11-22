@@ -1,20 +1,147 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sqlmap-2.dtd">
 <sqlMap namespace="User">
-	
-	<select id="validateLogin" resultClass="java.lang.String">
-		SELECT first_name
-		FROM sms_users2
-		WHERE user_id = #userName#
-		  AND password= #password#	
+
+	<select id="searchUser" resultClass="java.lang.String">
+		SELECT user_id
+		  FROM sms_users2
+		 WHERE LOWER(user_id) = LOWER(#search#)
 	</select>
 	
-	<procedure id="updateLogin" parameterClass="java.util.Map">
-		BEGIN
-			UPDATE sms_users2
-			SET last_login = #currentDate#
-			WHERE user_id = #userName#;
+	<procedure id="addRec" parameterClass="java.util.Map">
+		BEGIN			
+			INSERT INTO sms_users2
+						(user_id
+					   , password
+					   , first_name
+					   , last_name
+					   , middle_initial
+					   , email
+					   , active_tag
+					   , access_level
+					   , entry_date
+					   , last_login
+					   , last_user
+					   , last_update)
+			     VALUES(#username#
+			     	  , #password#
+			     	  , #firstname#
+			          , #lastname#
+			          , #middlename#
+			          , #email#
+			          , #activetag#
+			          , #accesslevel#
+			          , SYSDATE
+			          , SYSDATE
+			          , #username#
+			          , SYSDATE
+			          );
+			     	  
 		END;
 	</procedure>
+	
+	<procedure id="updateRec" parameterClass="java.util.Map">
+		BEGIN
+			UPDATE sms_users2
+			   SET first_name = #firstname#,
+			       last_name = #lastname#,
+			       middle_initial = #middlename#,
+			       email = #email#,
+			       active_tag = #activetag#,
+			       access_level = #accesslevel#,
+			       last_user = #updatedby#,
+			       attemp = decode(#activetag#,'Y', 0, attemp)
+			 WHERE LOWER(user_id) = LOWER(#username#);
+
+		END;
+	</procedure>
+	
+	<procedure id="changePass" parameterClass="java.util.Map">
+		BEGIN
+			UPDATE sms_users2
+			   SET password = #newpassword#,
+			       last_user = #updatedby#
+			 WHERE LOWER(user_id) = LOWER(#username#);
+
+		END;
+	</procedure>
+	
+	<typeAlias alias="UserClass" type="com.entity.Users" />
+	
+	<resultMap id="SMSUsersMap" 		class="UserClass">
+		<result column="user_id" 		property="userId"/>
+		<result column="password" 		property="password"/>
+		<result column="first_name" 	property="firstName"/>
+		<result column="last_name" 		property="lastName"/>
+		<result column="middle_initial" property="middleName"/>
+		<result column="email" 			property="email"/>
+		<result column="active_tag" 	property="activeTag"/>
+		<result column="access_level" 	property="accessLevel"/>
+		<result column="entry_date" 	property="entryDate"/>
+		<result column="last_login" 	property="lastLogin"/>
+		<result column="last_user" 		property="lastUser"/>
+		<result column="last_update" 	property="lastUpdate"/>
+	</resultMap>
+	
+	<select id="getSMSUsers" resultMap="SMSUsersMap">
+		SELECT LOWER(user_id) user_id
+	         , password
+	         , INITCAP(first_name) first_name
+	         , INITCAP(last_name) last_name
+	         , UPPER(middle_initial) middle_initial
+	         , LOWER(email) email
+	         , UPPER(active_tag) active_tag
+	         , CASE access_level
+                  WHEN 'A' THEN 'Admin'
+                  WHEN 'U' THEN 'User'
+                  ELSE access_level
+               END access_level
+	         , TRUNC(entry_date) entry_date
+	         , TRUNC(last_login) last_login
+	         , LOWER(last_user) last_user
+	         , TRUNC(last_update) last_update
+	    FROM SMS_USERS2
+	ORDER BY user_id
+	</select>
+	
+		<typeAlias alias="SearchUserClass" type="com.entity.Users" />
+	
+	<resultMap id="SearchUsersMap" 		class="SearchUserClass">
+		<result column="user_id" 		property="userId"/>
+		<result column="password" 		property="password"/>
+		<result column="first_name" 	property="firstName"/>
+		<result column="last_name" 		property="lastName"/>
+		<result column="middle_initial" property="middleName"/>
+		<result column="email" 			property="email"/>
+		<result column="active_tag" 	property="activeTag"/>
+		<result column="access_level" 	property="accessLevel"/>
+		<result column="entry_date" 	property="entryDate"/>
+		<result column="last_login" 	property="lastLogin"/>
+		<result column="last_user" 		property="lastUser"/>
+		<result column="last_update" 	property="lastUpdate"/>
+	</resultMap>
+	
+	<select id="getSearchResults" resultMap="SearchUsersMap">
+		SELECT LOWER(user_id) user_id
+	         , password
+	         , INITCAP(first_name) first_name
+	         , INITCAP(last_name) last_name
+	         , UPPER(middle_initial) middle_initial
+	         , LOWER(email) email
+	         , UPPER(active_tag) active_tag
+	         , CASE access_level
+                  WHEN 'A' THEN 'Admin'
+                  WHEN 'U' THEN 'User'
+                  ELSE access_level
+               END access_level
+	         , TRUNC(entry_date) entry_date
+	         , TRUNC(last_login) last_login
+	         , LOWER(last_user) last_user
+	         , TRUNC(last_update) last_update
+	    FROM SMS_USERS2
+	   WHERE LOWER(user_id) = LOWER(#search#)
+	ORDER BY user_id
+	</select>
+	
 	
 </sqlMap>

@@ -33,6 +33,8 @@ public class LoginServlet extends HttpServlet{
 				view = loginService.checkSession(req);
 			}else if("logout".equals(action)){
 				view = loginService.logout(req, loginService);
+			}else if("home".equals(action)){
+				view = loginService.home(req);
 			}
 			
 		}catch(Exception e){

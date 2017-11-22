@@ -4,11 +4,11 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
-import com.dao.UserDao;
+import com.dao.LoginUserDao;
 import com.entity.Users;
 import com.ibatis.sqlmap.client.SqlMapClient;
 
-public class UserDaoImpl implements UserDao{
+public class LoginUserDaoImpl implements LoginUserDao{
 	
 	private SqlMapClient sqlMapClient;
 	
@@ -21,75 +21,82 @@ public class UserDaoImpl implements UserDao{
 	}
 	
 	@Override
-	public void addUser(Map<String, Object> params) throws SQLException {
-		try{
-			this.sqlMapClient.startTransaction();
-			this.sqlMapClient.getCurrentConnection().setAutoCommit(false);
-			this.sqlMapClient.startBatch();
-			this.sqlMapClient.update("addRec", params);
-			this.sqlMapClient.executeBatch();
-			this.sqlMapClient.getCurrentConnection().commit();
-		}catch(SQLException e){
-			this.sqlMapClient.getCurrentConnection().rollback();
-			throw e;
-		}finally{
-			this.sqlMapClient.endTransaction();
-		}
-		
+	public String validateLogin(Map<String, Object> params) throws SQLException {
+		return (String) this.getSqlMapClient().queryForObject("validateLogin", params);
 	}
-
+	
 	@Override
 	public void updateUser(Map<String, Object> params) throws SQLException {
 		try{
 			this.sqlMapClient.startTransaction();
 			this.sqlMapClient.getCurrentConnection().setAutoCommit(false);
 			this.sqlMapClient.startBatch();
-			this.sqlMapClient.update("updateRec", params);
+			this.sqlMapClient.update("updateLogin",params);
 			this.sqlMapClient.executeBatch();
 			this.sqlMapClient.getCurrentConnection().commit();
 		}catch(SQLException e){
 			this.sqlMapClient.getCurrentConnection().rollback();
 			throw e;
 		}finally{
-			this.sqlMapClient.endTransaction();
+			this.getSqlMapClient().endTransaction();
 		}
-		
-	}
+	}	
 
+		
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Users> getSMSUsers() throws SQLException {
-		return (List<Users>) this.getSqlMapClient().queryForList("getSMSUsers");
+	public List<Users> getUser(Map<String, Object> params) throws SQLException {		
+		return (List<Users>) this.getSqlMapClient().queryForList("countAttemp",params);
 	}
-	
+
 	@Override
-	public void changePassword(Map<String, Object> params) throws SQLException {
+	public void addAttemp(Map<String, Object> params) throws SQLException {
 		try{
 			this.sqlMapClient.startTransaction();
 			this.sqlMapClient.getCurrentConnection().setAutoCommit(false);
 			this.sqlMapClient.startBatch();
-			this.sqlMapClient.update("changePass", params);
+			this.sqlMapClient.update("addAttemp",params);
 			this.sqlMapClient.executeBatch();
 			this.sqlMapClient.getCurrentConnection().commit();
 		}catch(SQLException e){
 			this.sqlMapClient.getCurrentConnection().rollback();
 			throw e;
 		}finally{
-			this.sqlMapClient.endTransaction();
+			this.getSqlMapClient().endTransaction();
 		}
-		
 	}
-
+	
 	@Override
-	public String searchUser(Map<String, Object> params) throws SQLException {
-		return (String) this.getSqlMapClient().queryForObject("searchUser", params);
+	public void lockAccount(Map<String, Object> params) throws SQLException {
+		try{
+			this.sqlMapClient.startTransaction();
+			this.sqlMapClient.getCurrentConnection().setAutoCommit(false);
+			this.sqlMapClient.startBatch();
+			this.sqlMapClient.update("lockAccount",params);
+			this.sqlMapClient.executeBatch();
+			this.sqlMapClient.getCurrentConnection().commit();
+		}catch(SQLException e){
+			this.sqlMapClient.getCurrentConnection().rollback();
+			throw e;
+		}finally{
+			this.getSqlMapClient().endTransaction();
+		}
 	}
-
-	@SuppressWarnings("unchecked")
+	
 	@Override
-	public List<Users> getSearchResults(Map<String, Object> params) throws SQLException {
-		return (List<Users>) this.getSqlMapClient().queryForList("getSearchResults", params);
+	public void resetAttemp(Map<String, Object> params) throws SQLException {
+		try{
+			this.sqlMapClient.startTransaction();
+			this.sqlMapClient.getCurrentConnection().setAutoCommit(false);
+			this.sqlMapClient.startBatch();
+			this.sqlMapClient.update("resetAttemp",params);
+			this.sqlMapClient.executeBatch();
+			this.sqlMapClient.getCurrentConnection().commit();
+		}catch(SQLException e){
+			this.sqlMapClient.getCurrentConnection().rollback();
+			throw e;
+		}finally{
+			this.getSqlMapClient().endTransaction();
+		}
 	}
-
-
 }

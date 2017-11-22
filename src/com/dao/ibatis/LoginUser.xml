@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sqlmap-2.dtd">
+<sqlMap namespace="User">
+	
+	<select id="validateLogin" resultClass="java.lang.String">
+		SELECT first_name
+		FROM sms_users2
+		WHERE user_id = #userName#
+		  AND password= #password#	
+	</select>
+	
+	<select id="countUser" resultClass="java.lang.String">
+		SELECT count(1)
+		FROM sms_users2
+		WHERE user_id = #userName#
+	</select>	
+	
+	<typeAlias alias="UserClass" type="com.entity.Users"/>
+	
+	<resultMap id="userMap" class="UserClass">
+		<result column="user_id" property="userName"/>
+		<result column="attemp" property="attemp"/>
+		<result column="active_tag" property="activeTag"/>
+		<result column="access_level" property="accessLevel"/>
+	</resultMap>
+	
+	<select id="countAttemp" resultMap="userMap">
+		SELECT user_id, nvl(attemp, 0) attemp, active_tag, access_level
+		FROM sms_users2
+		WHERE user_id = #userName#
+	</select>
+	
+	<procedure id="addAttemp" parameterClass="java.util.Map">
+		BEGIN
+			UPDATE sms_users2
+			SET attemp = NVL(attemp, 0) + 1
+			WHERE user_id = #userName#;
+		END;
+	</procedure>
+	
+	<procedure id="lockAccount" parameterClass="java.util.Map">
+		BEGIN
+			UPDATE sms_users2
+			SET active_tag = 'N'
+			WHERE user_id = #userName#;
+		END;
+	</procedure>
+	
+	<procedure id="resetAttemp"  parameterClass="java.util.Map">
+		BEGIN
+			UPDATE sms_users2
+			SET attemp = 0
+			WHERE user_id = #userName#;
+		END;
+	</procedure>
+	
+	<procedure id="updateLogin" parameterClass="java.util.Map">
+		BEGIN
+			UPDATE sms_users2
+			SET last_login = #currentDate#
+			WHERE user_id = #userName#;
+		END;
+	</procedure>
+	
+</sqlMap>

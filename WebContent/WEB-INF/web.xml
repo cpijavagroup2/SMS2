@@ -2,7 +2,7 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
   <display-name>SMS2</display-name>
   <welcome-file-list>
-    <welcome-file>pages/login.jsp</welcome-file>
+    <welcome-file>pages/login/login.jsp</welcome-file>
   </welcome-file-list>
   <servlet>
     <servlet-name>servletsms</servlet-name>
@@ -12,4 +12,44 @@
     <servlet-name>servletsms</servlet-name>
     <url-pattern>/sms</url-pattern>
   </servlet-mapping>
+  
+   <servlet>
+  	<servlet-name>userservlet</servlet-name>
+  	<servlet-class>com.servlet.UserServlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>userservlet</servlet-name>
+  	<url-pattern>/userserv</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+ 	<servlet-name>issuanceservlet</servlet-name>
+ 	<servlet-class>com.servlet.IssuanceServlet</servlet-class>
+  </servlet>
+ 
+  <servlet-mapping>
+ 	<servlet-name>issuanceservlet</servlet-name>
+ 	<url-pattern>/issuance</url-pattern>
+  </servlet-mapping>  
+  
+  <servlet>
+    <servlet-name>servletsupply</servlet-name>
+    <servlet-class>com.servlet.SupplyServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>servletsupply</servlet-name>
+    <url-pattern>/supply</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>servletstock</servlet-name>
+    <servlet-class>com.servlet.SuppliesStocksServlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>servletstock</servlet-name>
+    <url-pattern>/stock</url-pattern>
+  </servlet-mapping>
+  
 </web-app>
