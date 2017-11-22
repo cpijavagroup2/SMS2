@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sqlmap-2.dtd">
+<sqlMap namespace="Stock">
+
+	<typeAlias alias="SuppliesStockClass" type="com.entity.SuppliesStocks"/>
+	
+	<resultMap id="allStocks" class="SuppliesStockClass">
+		<result column="STOCK_ID" property="stockID"/>
+		<result column="ITEM_NAME" property="itemName"/>
+		<result column="QUANTITY" property="qty"/>
+		<result column="REFERENCE_NO" property="referenceNo"/>
+		<result column="DATE_ADDED" property="dateAdded"/>
+		<result column="PURCHASE_DATE" property="purchaseDate"/>
+		<result column="LAST_USER" property="lastUpdatedBy"/>
+		<result column="LAST_UPDATE" property="lastUpdate"/>
+	</resultMap>
+	
+	<select id="getAllStocks" resultMap="allStocks">
+		SELECT STOCK_ID , ITEM_NAME, QUANTITY, REFERENCE_NO, TO_CHAR(SUPP_STOCKS.DATE_ADDED, 'MM-DD-YYYY') DATE_ADDED, TO_CHAR(PURCHASE_DATE, 'MM-DD-YYYY') PURCHASE_DATE, SUPP_STOCKS.LAST_USER, TO_CHAR(SUPP_STOCKS.LAST_UPDATE, 'MM-DD-YYYY') LAST_UPDATE
+			FROM SUPPLIES_STOCKS2 SUPP_STOCKS, SUPPLIES2 SUPP
+			WHERE SUPP_STOCKS.SUPPLY_ID = SUPP.SUPPLY_ID
+			ORDER BY STOCK_ID
+	</select>
+	
+	<select id="searchStock" resultMap="allStocks">
+		SELECT STOCK_ID , ITEM_NAME, QUANTITY, REFERENCE_NO, TO_CHAR(SUPP_STOCKS.DATE_ADDED, 'MM-DD-YYYY') DATE_ADDED, TO_CHAR(PURCHASE_DATE, 'MM-DD-YYYY') PURCHASE_DATE, SUPP_STOCKS.LAST_USER, TO_CHAR(SUPP_STOCKS.LAST_UPDATE, 'MM-DD-YYYY') LAST_UPDATE
+			FROM SUPPLIES_STOCKS2 SUPP_STOCKS, SUPPLIES2 SUPP
+			WHERE SUPP_STOCKS.SUPPLY_ID = SUPP.SUPPLY_ID
+			AND (LOWER(STOCK_ID) LIKE '%' || #searchInput# || '%'
+			OR LOWER(ITEM_NAME) LIKE '%' || #searchInput# || '%'
+			OR LOWER(QUANTITY) LIKE '%' || #searchInput# || '%'
+			OR LOWER(REFERENCE_NO) LIKE '%' || #searchInput# || '%'
+			OR LOWER(SUPP_STOCKS.DATE_ADDED) LIKE '%' || #searchInput# || '%'
+			OR LOWER(PURCHASE_DATE) LIKE '%' || #searchInput# || '%'
+			OR LOWER(SUPP_STOCKS.LAST_USER) LIKE '%' || #searchInput# || '%'
+			OR LOWER(SUPP_STOCKS.LAST_UPDATE) LIKE '%' || #searchInput# || '%')
+	</select>
+	
+	<resultMap id="selectedStock" class="SuppliesStockClass">
+		<result column="SUPPLY_ID" property="supplyId"/>
+		<result column="STOCK_ID" property="stockID"/>
+		<result column="ITEM_NAME" property="itemName"/>
+		<result column="QUANTITY" property="qty"/>
+		<result column="REFERENCE_NO" property="referenceNo"/>
+		<result column="DATE_ADDED" property="dateAdded"/>
+		<result column="PURCHASE_DATE" property="purchaseDate"/>
+		
+	</resultMap>
+	<select id="getStock" resultMap="selectedStock">
+			SELECT SUPP_STOCKS.SUPPLY_ID SUPPLY_ID, STOCK_ID , ITEM_NAME, QUANTITY, REFERENCE_NO, TO_CHAR(SUPP_STOCKS.DATE_ADDED, 'YYYY-MM-DD') DATE_ADDED, TO_CHAR(PURCHASE_DATE, 'YYYY-MM-DD') PURCHASE_DATE
+			FROM SUPPLIES_STOCKS2 SUPP_STOCKS, SUPPLIES2 SUPP
+			WHERE SUPP_STOCKS.SUPPLY_ID = SUPP.SUPPLY_ID
+			AND STOCK_ID = #stockId#
+	</select>
+	
+	<resultMap id="itemStocks" class="SuppliesStockClass">
+		<result column="ITEM_NAME" property="itemName"/>
+		<result column="SUPPLY_ID" property="supplyId"/>
+	</resultMap>
+	
+	<select id="getAllItems" resultMap="itemStocks">
+		SELECT ITEM_NAME, SUPPLY_ID FROM SUPPLIES2
+		WHERE OBSOLETE_TAG != 'Y'
+	</select>
+	
+	<procedure id="addStock" parameterClass="java.util.Map">
+		DECLARE 
+		STOCK_ID NUMBER(15);
+		BEGIN
+			SELECT NVL(MAX(STOCK_ID)+1,1) into STOCK_ID FROM SUPPLIES_STOCKS2;
+
+			INSERT INTO SUPPLIES_STOCKS2 
+				VALUES(STOCK_ID,
+					#supplyId#,
+					TO_DATE( #dateAdded#, 'YYYY-MM-DD'),
+					TO_DATE( #purchaseDate#, 'YYYY-MM-DD'),
+					#referenceNo#,
+					#qty#,
+					#userName#,
+					trunc(sysdate));
+					
+			UPDATE SUPPLIES2 
+			SET ACTUAL_COUNT = ACTUAL_COUNT + CAST(#qty# as INT) , LAST_UPDATE = trunc(sysdate)
+			WHERE  SUPPLY_ID = #supplyId#;
+		END;
+	</procedure>
+	
+	<procedure id="updateStock" parameterClass="java.util.Map">
+		BEGIN
+					
+			UPDATE SUPPLIES2 
+			SET ACTUAL_COUNT = ACTUAL_COUNT + CAST(#countChange# as INT) , LAST_UPDATE = trunc(sysdate)
+			WHERE  SUPPLY_ID = #supplyId#; 
+			
+			UPDATE SUPPLIES_STOCKS2 
+				SET QUANTITY = #qty#,
+				REFERENCE_NO = #referenceNo#,
+				DATE_ADDED = TO_DATE( #dateAdded#, 'YYYY-MM-DD'),
+				PURCHASE_DATE = TO_DATE( #purchaseDate#, 'YYYY-MM-DD'),				
+				LAST_USER = #userName#,
+				LAST_UPDATE = trunc(sysdate)				
+				WHERE STOCK_ID = #stockId#;
+			
+		END;
+	</procedure>
+	
+	
+</sqlMap>

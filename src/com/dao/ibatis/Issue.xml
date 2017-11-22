@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sqlmap-2.dtd">
+<!-- <sqlMap namespace="User"> -->
+<sqlMap namespace="Issue">
+
+<!-- 	<select id="validateLogin" resultClass="java.lang.String">
+		SELECT user_name
+		  FROM trng_user
+		 WHERE user_name = #userName#
+		   AND password = #password#
+	</select> -->
+	
+	<procedure id ="addRecIssue" parameterClass = "java.util.Map">
+		DECLARE
+		i_num NUMBER; 
+		BEGIN
+
+	SELECT  nvl(max(issue_id) +1, 1) INTO i_num FROM ISSUED_SUPPLIES_G;
+		
+			INSERT INTO ISSUED_SUPPLIES_G
+				(issue_id,
+				supply_id, 
+				issue_date, 
+				requestor, 
+				quantity, 
+				dept_id, 
+				last_user, 
+				last_update )
+			VALUES(i_num, 
+				#itemName#, 
+		  #itemIssueDate#,
+		  #itemRequestedby#, 
+		  #itemQuantity#,
+		  #itemDepartmentName#,
+		  #lastUpdatedBy#, 
+		to_date(TO_CHAR(sysdate, 'MM/DD/RRRR') ,  'MM/DD/RRRR'));
+				
+		UPDATE SUPPLIES2
+		SET actual_count = (actual_count-#itemQuantity#)
+		WHERE supply_id = #itemName#;
+						
+			END;										
+	</procedure>
+	
+		<procedure id ="updateRecIssue" parameterClass = "java.util.Map">
+		DECLARE
+		i_num NUMBER; 
+		BEGIN
+		
+		UPDATE SUPPLIES2
+		SET actual_count = (actual_count+#itemTempQuant#)
+		WHERE supply_id = #itemName#;
+		
+		UPDATE ISSUED_SUPPLIES_G
+		SET issue_date = #itemIssueDate#,
+			requestor =  #itemRequestedby#,
+			quantity =  #itemQuantity#,
+			dept_id =  #itemDepartmentName#,
+			last_user = #lastUpdatedBy#, 
+			last_update = to_date(TO_CHAR(sysdate, 'MM/DD/RRRR') ,  'MM/DD/RRRR')			
+		WHERE issue_id = #itemIssueId#;
+								
+		UPDATE SUPPLIES2
+		SET actual_count = (actual_count-#itemQuantity#)
+		WHERE supply_id = #itemName#;
+						
+			END;										
+	</procedure>
+	
+	<!-- <procedure id ="updateRec" parameterClass = "java.util.Map">
+		begin
+			update trng_user set
+			password = #password#
+			where user_name = #userName#;
+			end;	
+	</procedure> -->
+
+	 <typeAlias alias="IssuanceFieldsClass" type="com.entity.IssuanceFields"/>
+	
+	<resultMap id="allSupplyIDMap" class = "IssuanceFieldsClass">
+		<result column="supply_id" property="supplyId"/>
+		<result column="item_name" property="itemName"/>
+		<result column="actual_count" property="itemCountCurrent"/>
+	</resultMap> 
+	
+	
+ 	<select id="getSupplyIdFields" resultMap="allSupplyIDMap">
+		SELECT 
+		supply_id, 
+		item_name, 
+		actual_count 
+		FROM SUPPLIES2
+		WHERE OBSOLETE_TAG  != 'Y'
+	</select> 
+	
+	<resultMap id="allDeptIDMap" class = "IssuanceFieldsClass">
+		<result column="department_id" property="deptId"/>
+		<result column="department_name" property="deptName"/>
+	</resultMap> 
+	
+	
+ 	<select id="getDeptIdFields" resultMap="allDeptIDMap">
+		SELECT 
+		department_id, 
+		department_name 
+		FROM departments
+	</select>   
+	
+	<resultMap id="allMap" class = "IssuanceFieldsClass">
+		<result column="ISSUE_ID" property="issueId"/>
+		<result column="ITEM_NAME" property="itemName"/>
+		<result column="SUPPLY_ID" property="supplyId"/>
+	    <result column="QUANTITY" property="quantity"/>
+		<result column="REQUESTOR" property="requestedBy"/>
+		<result column="DEPARTMENT_NAME" property="deptName"/>
+		<result column="DEPARTMENT_ID" property="deptId"/>
+		<result column="ISSUE_DATE" property="issueDate"/>
+		<result column="LAST_USER" property="lastUpdatedBy"/>
+		<result column="LAST_UPDATE" property="lastUpdate"/>		
+	</resultMap> 
+	
+	
+ 	<select id="getAllFields" resultMap="allMap">		
+	SELECT a.ISSUE_ID, 
+	b.ITEM_NAME,  
+	b.SUPPLY_ID,
+	a.QUANTITY, 
+	a.REQUESTOR,  
+	c.DEPARTMENT_NAME , 
+	c.DEPARTMENT_ID, 
+	to_date(to_char(a.ISSUE_DATE,  'mm/dd/yyyy'), 'mm/dd/yyyy')ISSUE_DATE,
+	a.LAST_USER,
+	to_date(to_char(a.LAST_UPDATE , 'mm/dd/yyyy'), 'mm/dd/yyyy')LAST_UPDATE 
+ 	FROM ISSUED_SUPPLIES_G a, SUPPLIES2 b, departments c
+	WHERE a.SUPPLY_ID = b.SUPPLY_ID
+	AND a.dept_id  = c.DEPARTMENT_ID 
+ 	order by 1 desc
+	</select>  
+	
+	<select id="searchIssue" resultMap="allMap">		
+	SELECT a.ISSUE_ID, 
+	b.ITEM_NAME,  
+	b.SUPPLY_ID,
+	a.QUANTITY, 
+	a.REQUESTOR,  
+	c.DEPARTMENT_NAME , 
+	c.DEPARTMENT_ID, 
+	to_date(to_char(a.ISSUE_DATE,  'mm/dd/yyyy'), 'mm/dd/yyyy')ISSUE_DATE,
+	a.LAST_USER,
+	to_date(to_char(a.LAST_UPDATE , 'mm/dd/yyyy'), 'mm/dd/yyyy')LAST_UPDATE 
+ 	FROM ISSUED_SUPPLIES_G a, SUPPLIES2 b, departments c
+	WHERE a.SUPPLY_ID = b.SUPPLY_ID
+	AND a.dept_id  = c.DEPARTMENT_ID 
+	AND(lower(a.ISSUE_ID) LIKE '%' || #searchInput# || '%'  
+		OR LOWER(b.ITEM_NAME) LIKE '%' || #searchInput# || '%' 
+		OR LOWER(b.SUPPLY_ID) LIKE '%' || #searchInput# || '%'
+		OR LOWER(a.QUANTITY) LIKE '%' || #searchInput# || '%'   
+		OR LOWER(a.REQUESTOR) LIKE '%' || #searchInput# || '%'
+		OR LOWER(c.DEPARTMENT_NAME) LIKE '%' || #searchInput# || '%'   
+		OR LOWER(to_char(a.ISSUE_DATE,  'mm/dd/yyyy')) LIKE '%' || #searchInput# || '%'
+		OR LOWER(a.LAST_USER) LIKE '%' || #searchInput# || '%'
+		OR LOWER(to_char(a.LAST_UPDATE , 'mm/dd/yyyy')) LIKE '%' || #searchInput# || '%')
+ 	order by 1 desc
+	</select>  
+	
+</sqlMap>

@@ -1,0 +1,9 @@
+@CHARSET "ISO-8859-1";
+#mainDiv{
+	margin:auto;
+	width:1150px;
+	height: 500px;
+	position: relative;
+	top:105px;
+	/* border-style: solid; */
+}

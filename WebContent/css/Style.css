@@ -1,0 +1,360 @@
+@CHARSET "ISO-8859-1";
+.header {
+	width: 100%;
+	height: 54px;
+	background: rgb(24,28,31);
+	position: relative;
+}
+
+.header2{
+	width: 980px;
+	height: 30px;
+	position: absolute;
+	margin-top: 12px;
+	margin-left: 185px;
+	
+}
+
+.userheader{
+	width: 180px;
+	height: 30px;
+	position: absolute;
+	margin-left: 985px;
+	margin-top: 12px;
+}
+
+.userheaderfont{
+	position: absolute;
+	margin-top: 6px;
+	margin-left: 30px;
+	font-family: Helvetica;
+	font-size: 14px;
+	color: white;
+}
+
+.menuheaderfont{
+	position: absolute;
+	margin-top: 6px;
+	font-family: Helvetica;
+	font-size: 14px;
+	color: rgb(151,151,169);
+}
+
+.menuheaderpics{
+	position: absolute;
+	margin-bottom: 4px;
+	height: 30px;
+	width: 30px;
+}
+
+.boxlogo {
+    border: 5px solid #8b2;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    background-color: grey;
+}
+.logofont{
+	font-family: Helvetica;
+	font-size: 26px;
+	color: white;
+	width: 200px;
+	height: 30px;
+}
+
+
+body{ 
+   margin:0;
+   padding:0;
+   }
+   
+   
+
+
+.bodyhead{
+	width: 100%;
+	height: 104;
+	background: rgb(250,251,252);
+	position: relative;
+}
+
+.bodyhead2{
+	width: 980px;
+	height: 64px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	margin-left: 185px;
+	position: absolute;
+}
+
+.bodyhead3 {
+	height: 64px;
+	width: 64px;
+	position: absolute;
+}
+
+.bodyhead4 {
+	height: 40px;
+	width: 92%;
+	position: absolute;
+	margin-left: 76px;
+	margin-top: 12px;
+	margin-bottom: 12px;
+	
+}
+
+
+.bodyheaderpics {
+	height: 66px;
+}
+
+.bodyheaderfont{
+	height: 30px;
+	 font-family: Helvetica;
+	font-size: 28px;
+	text-decoration: inherit;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	color:  rgb(62,62,62);
+}
+
+
+.mainContents{
+	width: 980px;
+	margin-left: 185px;
+}
+
+.bodyaddnewbtn {
+	height: 30px;
+	width :95.75px;
+    color: rgb(62,62,62);
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    margin-left: 496px;
+    margin-bottom: 21px;
+}
+
+
+/* Dropdown Button */
+.dropbtn {
+	height: 30px;
+    color: #f9f9f9;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+.dropdownbtn{
+	height: 30px;
+}
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+    position: relative;
+    display: inline-block;
+    height: 30px; 
+    margin-left: 134px;
+    width: 180px;
+ 
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 180px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+    color: black;
+   	padding: 12px 16px; 
+    text-decoration: none;
+    display: block;
+    font-family: Helvetica;
+	font-size: 14px;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+    
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {
+    background-color: rgb(36,41,46); 
+}
+
+.bodyaddnewbtn:hover {
+	background-color: rgb(36,41,46); 
+	color: white;
+}
+
+label.menuheaderfont:hover{
+	color: white; 	
+	cursor: pointer;
+}
+
+table.supplylist {
+	border-collapse: collapse;
+	border: 1px solid #ddd;
+	table-layout: fixed;
+}
+th {
+    background-color: rgb(242,242,242);
+    color: rgb(62,62,62);
+    font-size: 13px;
+    font-family: Helvetica;
+    height: 50px; 
+}
+td.tdSupply {
+    color: rgb(62,62,62);
+    font-size: 12px;
+    font-family: Helvetica;
+    height: 42px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    word-wrap: break-word;
+}
+
+.tableRow:hover {background-color: #f5f5f5}
+.bodyeditformfont {
+	font-size: 15px;
+    font-family: Helvetica;
+    margin-left: 20px;
+}
+
+.bodysaveformfont {
+	font-size: 15px;
+    font-family: Helvetica;
+    visibility: hidden;
+    cursor: pointer; 
+    text-decoration: underline;
+    color: rgb(32,78, 138); 
+    margin-left: 710px;
+}
+
+ .bodycancelformfont {
+	font-size: 15px;
+    font-family: Helvetica;
+    visibility: hidden;
+      cursor: pointer; 
+    text-decoration: underline;
+    color: rgb(32,78, 138);
+}
+ 
+
+.bodyeditform {
+	border : 1px solid rgb(128,128,128); 
+	width: 980px;
+	height: 220px;
+	display: none;
+	position: relative;
+	border-top-style: hidden;
+}
+
+.div1bodyeditform{
+	width: 491px;
+	height: 220px;
+	position: absolute;
+	line-height:27px;
+}
+.div2bodyeditform{
+	margin-left: 491px;
+	height: 220px;
+	width : 491px;
+	position: absolute;
+	line-height:27px;
+}
+
+.bodyeditformfont1 {
+	font-family: Helvetica; 
+	font-size: 12px;
+	padding-left: 30px;
+}
+
+.bodyselecttab{
+	font-family: Helvetica; 
+	font-size: 15px;
+	margin-left: 30px;
+	border : 1px solid #ddd; 
+	width: 300px;
+	text-align: right;
+}
+
+.bodytextfields{
+	font-family: Helvetica; 
+	font-size: 15px;
+	border : 1px solid #ddd; 
+	width: 300px;
+	text-align: right;
+	border-radius: 2px;
+}
+
+.bodytextfields:focus {
+    border: 3px solid #555;
+    text-align: left;
+}
+
+.bodyaddform {
+	border : 1px solid rgb(128,128,128);
+	width: 980px;
+	height: 220px;
+	display: block;
+	position: relative;
+	border-top-style: hidden;
+}
+
+.div1bodyaddform{
+	width: 491px;
+	height: 150px;
+	position: absolute;
+	line-height:27px;
+}
+.div2bodyaddform{
+	margin-left: 491px;
+	height: 150px;
+	width : 491px;
+	position: absolute;
+	line-height:27px;
+}
+
+.bodyaddsavebtn {
+	height: 30px;
+	width :100px;
+    color: white;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    margin-left: 388px;
+    margin-top: 130px;
+    background-color: rgb(0,128,192);
+}
+
+
+.bodyaddcancelbtn {
+	height: 30px;
+	width :100px;
+   	color: white;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    margin-top: 130px;
+    background-color: rgb(0,128,192);
+}
+
+
+.bodyaddformfont {
+	font-size: 16px;
+    font-family: Helvetica;
+    margin-left: 30px;
+}

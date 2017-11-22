@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sqlmap-2.dtd">
+<sqlMap namespace="Supply">
+
+	<typeAlias alias="SupplyClass" type="com.entity.Supply" />
+	
+	<resultMap id="allSupplyMap" class="SupplyClass">
+		<result column="supply_id" property="supplyId" />
+		<result column="type_name" property="supplyTypeId" />
+		<result column="item_name" property="itemName" />
+		<result column="item_unit" property="itemUnit" />
+		<result column="obsolete_tag" property="obsoleteTag" />
+		<result column="location" property="location" />
+		<result column="reorder_level" property="reorderLevel" />
+		<result column="actual_count" property="actualCount" />
+		<result column="remarks" property="remarks" />
+		<result column="date_added" property="entryDate" />
+		<result column="last_user" property="lastUpdateBy" />
+		<result column="last_update" property="lastUpdate" />
+	</resultMap>
+
+	<resultMap id="allSearchSupplyMap" class="SupplyClass">
+		<result column="supply_id" property="supplyId" />
+		<result column="type_name" property="supplyTypeId" />
+		<result column="item_name" property="itemName" />
+		<result column="item_unit" property="itemUnit" />
+		<result column="obsolete_tag" property="obsoleteTag" />
+		<result column="location" property="location" />
+		<result column="reorder_level" property="reorderLevel" />
+		<result column="actual_count" property="actualCount" />
+		<result column="remarks" property="remarks" />
+		<result column="date_added" property="entryDate" />
+		<result column="last_user" property="lastUpdateBy" />
+		<result column="last_update" property="lastUpdate" />
+	</resultMap>	
+	<resultMap id="allSupplyTypeMap" class="SupplyClass">
+		<result column="supply_type_id" property="supplytypeId" />
+		<result column="type_name" property="supplyTypeName" />
+	</resultMap>
+	
+	<select id="searchSupply" resultMap="allSearchSupplyMap">
+	SELECT  SUPPLY_ID, TYPE_NAME, REORDER_LEVEL, REMARKS, 
+		OBSOLETE_TAG, LOCATION, a.LAST_USER, TO_CHAR(a.LAST_UPDATE, 'MM-DD-YYYY') LAST_UPDATE, ITEM_UNIT,
+		ITEM_NAME, TO_CHAR(a.DATE_ADDED, 'MM-DD-YYYY') DATE_ADDED, ACTUAL_COUNT
+			FROM HR.SUPPLIES2 a , HR.SUPPLY_TYPES2 b
+        	WHERE a.SUPPLY_TYPE_ID = b.SUPPLY_TYPE_ID
+			AND (LOWER(SUPPLY_ID) LIKE '%' || #searchInput# || '%' 
+			OR LOWER(TYPE_NAME) LIKE '%' || #searchInput# || '%' 
+			OR LOWER(ITEM_NAME) LIKE '%' || #searchInput# || '%' 
+			OR LOWER(ITEM_UNIT) LIKE '%' || #searchInput# || '%' 
+			OR LOWER(OBSOLETE_TAG) LIKE '%' || #searchInput# || '%' 
+			OR LOWER(LOCATION) LIKE '%' || #searchInput# || '%' 
+			OR LOWER(REORDER_LEVEL) LIKE '%' || #searchInput# || '%' 
+			OR LOWER(ACTUAL_COUNT) LIKE '%' || #searchInput# || '%' 
+			OR LOWER(REMARKS) LIKE '%' || #searchInput# || '%'
+			OR LOWER(DATE_ADDED) LIKE '%' || #searchInput# || '%' 
+			OR LOWER(a.LAST_USER) LIKE '%' || #searchInput# || '%'
+			OR LOWER(a.LAST_UPDATE) LIKE '%' || #searchInput# || '%')
+			ORDER BY SUPPLY_ID
+	</select>
+	
+	<select id="getAllTypeName" resultMap="allSupplyTypeMap">
+		SELECT SUPPLY_TYPE_ID,TYPE_NAME 
+    		FROM HR.SUPPLY_TYPES2
+    	ORDER BY SUPPLY_TYPE_ID
+	</select>
+	
+	
+	<select id="getAllUsers" resultMap="allSupplyMap">
+		SELECT  SUPPLY_ID, TYPE_NAME, REORDER_LEVEL, REMARKS, 
+		OBSOLETE_TAG, LOCATION, a.LAST_USER, TO_CHAR(a.LAST_UPDATE, 'MM-DD-YYYY') LAST_UPDATE, ITEM_UNIT,
+		ITEM_NAME, TO_CHAR(a.DATE_ADDED, 'MM-DD-YYYY') DATE_ADDED, ACTUAL_COUNT
+			FROM HR.SUPPLIES2 a , HR.SUPPLY_TYPES2 b
+        WHERE a.SUPPLY_TYPE_ID = b.SUPPLY_TYPE_ID
+        ORDER BY SUPPLY_ID
+	</select>
+	
+	<select id="populateFields" resultMap="allSupplyMap">
+		SELECT  SUPPLY_ID, TYPE_NAME, REORDER_LEVEL, REMARKS, 
+		OBSOLETE_TAG, LOCATION, a.LAST_USER, TO_CHAR(a.LAST_UPDATE, 'MM-DD-YYYY') LAST_UPDATE, ITEM_UNIT,
+		ITEM_NAME, TO_CHAR(a.DATE_ADDED, 'MM-DD-YYYY') DATE_ADDED, ACTUAL_COUNT
+			FROM HR.SUPPLIES2 a , HR.SUPPLY_TYPES2 b
+        WHERE a.SUPPLY_TYPE_ID = b.SUPPLY_TYPE_ID
+        AND SUPPLY_ID = #supplyid#
+	</select>
+	
+	<procedure id="addRecSupply" parameterClass="java.util.Map">
+		BEGIN
+			INSERT INTO HR.SUPPLIES2
+				(SUPPLY_ID, 
+				 SUPPLY_TYPE_ID,
+				 ITEM_NAME,
+				 ITEM_UNIT,
+				 OBSOLETE_TAG,
+				 LOCATION,
+				 REORDER_LEVEL,
+				 ACTUAL_COUNT,
+				 REMARKS,
+				 DATE_ADDED,
+				 LAST_USER,
+				 LAST_UPDATE)
+			VALUES
+				(#supplyId#, 
+				#supplyTypeId#,
+				#itemName#,
+				#itemUnit#,
+				#obsoleteTag#,
+				#location#,
+				#reorderLevel#,
+				#actualCount#,
+				#remarks#,
+				#dateAdded#,
+				#lastUser#,
+				#lastUpdate#);
+		END;
+	</procedure>
+	
+	
+	<procedure id="updateRecSupply" parameterClass="java.util.Map">
+		BEGIN
+			UPDATE HR.SUPPLIES2
+					SET OBSOLETE_TAG = #obsoletetag#,
+						LOCATION = #location#,
+						ITEM_UNIT = #itemunit#,
+						REORDER_LEVEL = #reorderlevel#,
+						REMARKS = #remarks#,
+						ITEM_NAME = #itemname#,
+						LAST_UPDATE = #lastupdate#,
+						LAST_USER = #lastuser#
+			WHERE SUPPLY_ID = #supplyid#;
+		END;
+	</procedure>
+	
+
+	
+	
+
+
+</sqlMap>

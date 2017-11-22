@@ -1,0 +1,89 @@
+#divSuppliesStocksFields{
+	margin:auto;
+	width:410px;
+	vertical-align: top;
+	margin-bottom: 10px;
+}
+#divSuppliesStocksButtons{
+	width:130px;
+	top: 150px;
+	right:250px;
+	position: absolute;
+}
+#divSuppliesStocksTable{
+	margin: auto;
+	vertical-align: top;
+	width: 830px;
+	height: 202px;
+}
+#tblSuppliesStocks{
+	border: 1px solid gray; 
+	margin: 2px 0px 0px 2px;
+
+}
+.label{
+	font-family: Arial;
+	font-size: 14px;
+	text-align: left;
+}
+.fields{
+	width: 300px !important; 
+}
+th{
+	border:1px solid; 
+	font-family: Arial;
+	font-size: 14px;
+	padding-left: 10px;
+	padding-right: 10px; 
+	
+}
+.trSearch{
+	height: 100px;
+	vertical-align: bottom;
+}
+.btn{
+	width: 130px;
+	height: 25px;
+	margin-bottom: 5px;
+	background-color: rgb(74,139,194);
+	color: white;
+	font-weight: bolder;
+}
+.recRigth{
+	text-align: right;
+}
+.suppliesStocksRecord{
+	padding:2px;
+	border:1px solid; 
+	font-family: Arial;
+	font-size: 12px;
+}
+
+#imgSearch{
+	height: 15px;
+	width: 15px;
+}
+.disabled{
+	background-color: rgb(163, 197, 224);
+	color: rgb(140,140,140);
+}
+
+.dataRefNo{
+	overflow: hidden;
+	text-overflow: ellipsis;
+	word-wrap: break-word;
+}
+
+.rowHeight{
+	overflow: hidden; 
+	height: auto;
+	min-height: 25px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.tableData{
+	height: 175px; 
+	overflow-y: scroll; 
+	overflow-x: auto;
+}

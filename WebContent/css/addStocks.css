@@ -1,0 +1,36 @@
+@CHARSET "ISO-8859-1";
+#mainDiv{
+	margin:auto;
+	width:1150px;
+	height: 500px;
+	position: relative;
+	top:105px;
+}
+#divSuppliesStocksFields{
+	margin:auto;
+	width:410px;
+	vertical-align: top;
+	margin-bottom: 10px;
+}
+#divSuppliesStocksButtons{
+	width:130px;
+	top: 60px;
+	right:20px;
+	position: absolute;
+}
+.label{
+	font-family: Arial;
+	font-size: 14px;
+	text-align: right;
+}
+.fields{
+	width: 300px;
+}
+.btn{
+	width: 130px;
+	height: 25px;
+	margin-bottom: 5px;
+	background-color: rgb(74,139,194);
+	color: white;
+	font-weight: bolder;
+}
